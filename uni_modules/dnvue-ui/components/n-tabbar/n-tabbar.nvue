@@ -1,0 +1,225 @@
+<template>
+	<view class="tabbar_absolute" :style="background_style">
+		<!-- 主体 -->
+		<view class="tabbar_body" :style="body_style">
+			<scroll-view @scrolltoupper="onScrolltoupper(index)" @scrolltolower="onScrolltolower(index)"
+				:class="[showScrollbar?'':'showScrollbar','scrollView']" bounce="false" v-for="(item,index) in list"
+				:key="index" enable-flex :scroll-y="true" :show-scrollbar="showScrollbar">
+				<!-- 小程序动态定义插槽名 -->
+				<!-- #ifndef H5 || APP-PLUS -->
+				<slot name="{{item.solt}}"></slot>
+				<!-- #endif  -->
+				<!-- H5和APP -->
+				<!-- #ifdef H5 || APP-PLUS -->
+				<slot :name="`${item.solt}`"></slot>
+				<!-- #endif  -->
+			</scroll-view>
+		</view>
+		<!-- 底部导航栏 -->
+		<view :style="tabbar_container_style" class="tabbar_container">
+			<view class="tabbar_item" v-for="(item,index) in list" :key="index" @click="onTabbar(index)">
+				<view class="tabbar_item_index" :style="{height:`${defaultConfig.height}rpx`}">
+					<image :fade-show="false" mode="aspectFit"
+						:style="{width:`${defaultConfig.iconSize}rpx`,height:`${defaultConfig.iconSize}rpx`}"
+						:src="tabbarIndex==index?item.selectedIconPath:item.iconPath"></image>
+					<n-text :size="defaultConfig.fontSize" lines="1"
+						:style-custom="{marginTop:`${defaultConfig.textTop}rpx`}"
+						:color="index==tabbarIndex?defaultConfig.selectedColor:defaultConfig.color" :text="item.text">
+					</n-text>
+					<view class="badge">
+						<n-badge :count="item.count" :is-dot="item.isDot"></n-badge>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	/**
+	 * tabbar 自定义底部导航栏
+	 * @description 底部导航栏组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/layout_component/n-tabbar.html
+	 * @property {Array, Object} list 自定义导航栏数据
+	 * @property {Array, Object} config 底部导航栏配置
+	 * @property {String, Number} current 控制当前显示的自定义导航栏页面
+	 * @property {Boolean} show-scrollbar 控制页面是否出现滚动条
+	 * @property {String} background 页面背景颜色
+	 */
+	export default {
+		name: "nTabBar",
+		props: {
+			list: {
+				type: [Array, Object], //自定义导航栏数据
+				default: function() {
+					return []
+				}
+			},
+			config: {
+				type: [Array, Object], //底部导航栏配置
+				default: function() {
+					return {}
+				}
+			},
+			current: {
+				type: [String, Number], //控制当前显示的自定义导航栏页面
+				default: 0
+			},
+			showScrollbar: {
+				type: Boolean, //控制页面是否出现滚动条
+				default: false
+			},
+			background: {
+				type: String, //页面背景颜色
+				default: 'transparent'
+			}
+		},
+		data() {
+			return {
+				tabbarIndex: 0,
+				tabbarLeft: 0,
+				defaultConfig: {
+					"color": "$gray-13", //文本颜色
+					"selectedColor": "$theme-6", //选中文本颜色
+					"backgroundColor": "$gray-1", //背景颜色
+					"fontSize": 24, //文本大小
+					"textTop": 8,//文本距离图标的距离
+					"iconSize": 50, //图片大小
+					"height": 110, //底部导航栏高度
+					"borderTopColor": "$gray-5" //tabbar 上边框的颜色
+				}
+			}
+		},
+		watch: {
+			//切换当前页面tabbar
+			current: {
+				handler(newVal) {
+					this.tabbarIndex = this.current;
+					this.onTabbar(this.current);
+				},
+				immediate: true
+			},
+			//合并底部导航栏配置
+			config: {
+				handler(newVal) {
+					Object.assign(this.defaultConfig, this.config)
+				},
+				immediate: true
+			}
+		},
+		computed: {
+			//页面背景色
+			background_style() {
+				let style = {
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[
+						this.background]
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			//切换自定义tabbar时显示的页面距离
+			body_style() {
+				let style = {
+					left: `${this.tabbarLeft}rpx`,
+					width: `${750*this.list.length}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			//自定义底部导航栏颜色，顶部边框颜色
+			tabbar_container_style() {
+				let style = {
+					background: this.$store.theme[this.defaultConfig.backgroundColor] == undefined ? this.defaultConfig
+						.backgroundColor : this.$store.theme[
+							this.defaultConfig.backgroundColor],
+					borderTopColor: this.$store.theme[this.defaultConfig.borderTopColor] == undefined ? this
+						.defaultConfig
+						.borderTopColor : this.$store.theme[
+							this.defaultConfig.borderTopColor]
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		},
+		methods: {
+			onTabbar(e) {
+				let interval = Math.abs(Number(this.tabbarIndex) - Number(e))
+				if (Number(this.tabbarIndex) - Number(e) > 0) {
+					//向左侧
+					this.tabbarLeft = this.tabbarLeft + (this.tabbarIndex - Number(e)) * 750;
+				} else {
+					//向右侧
+					this.tabbarLeft = Number(e) * -750;
+				}
+				this.tabbarIndex = e;
+				this.$emit("change", {
+					index: e
+				});
+			},
+			//滚动到顶部，会触发 scrolltoupper 事件，使用方式为[当前tabbar项的slot名称]+Scrolltoupper，例如indexScrolltoupper
+			onScrolltoupper(index) {
+				this.$emit(`${this.list[index].solt}Scrolltoupper`)
+			},
+			//滚动到底部，会触发 scrolltolower 事件
+			onScrolltolower(index) {
+				this.$emit(`${this.list[index].solt}Scrolltolower`)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.tabbar_item_index {
+		justify-content: center;
+		align-items: center;
+		width: 125rpx;
+	}
+
+	.tabbar_item {
+		flex: 1;
+		align-items: center;
+	}
+
+	.tabbar_container {
+		flex-direction: row;
+		border-top-width: 2rpx;
+	}
+
+	.tabbar_body {
+		flex-direction: row;
+		flex: 1;
+		height: 0;
+	}
+
+	.tabbar_absolute {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		/* #ifndef APP-NVUE */
+		overflow-x: hidden;
+		/* #endif */
+	}
+
+	.scrollView {
+		width: 750rpx;
+		/* #ifndef APP-NVUE */
+		overflow: hidden;
+		/* #endif */
+	}
+
+	.badge {
+		position: absolute;
+		top: 12rpx;
+		right: 0;
+	}
+
+	/* #ifndef APP-NVUE */
+	.showScrollbar ::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
+	}
+
+	/* #endif */
+</style>

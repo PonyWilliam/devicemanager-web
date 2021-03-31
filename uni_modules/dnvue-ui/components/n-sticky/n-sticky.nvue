@@ -1,0 +1,38 @@
+<template>
+	<view>
+		<slot name="above"></slot>
+		<view class="sticky">
+			<slot name="sticky"></slot>
+		</view>
+		<slot name="below"></slot>
+	</view>
+</template>
+
+<script>
+	/**
+	 * sticky 吸顶
+	 * @description 吸顶组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/layout_component/n-sticky.html
+	 */
+	export default {
+		name:"nSticky",
+		data() {
+			return {
+
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.sticky {
+		position: sticky !important;
+		top: 0;
+		z-index: 9999;
+	}
+</style>

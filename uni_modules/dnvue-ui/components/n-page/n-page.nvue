@@ -1,0 +1,158 @@
+<template>
+	<view class="page-absolute">
+		<!-- 全屏加载 -->
+		<view v-if="loading" @click.stop class="page-screen">
+			<image :style="image_style" :src="loadingGif"></image>
+			<text :style="text_style">{{loadingText}}</text>
+		</view>
+		<view v-else class="page-absolute" :style="background_style">
+			<!-- 全屏背景图 -->
+			<image v-if="!!backgroundImage" mode="aspectFill" class="page-absolute" style="width: 100%;height: 100%;"
+				:src="backgroundImage"></image>
+			<!-- 状态栏-->
+			<slot name="navbar"></slot>
+			<!-- 头部 -->
+			<slot name="header"></slot>
+			<!-- 主体 -->
+			<scroll-view enable-flex :show-scrollbar="showScrollbar"
+				:class="[showScrollbar?'':'showScrollbar','pageBody']" :scroll-y="true" @scrolltoupper="onScrolltoupper"
+				@scrolltolower="onScrolltolower">
+				<slot name="body"></slot>
+			</scroll-view>
+			<!-- 底部 -->
+			<slot name="footer"></slot>
+		</view>
+	</view>
+</template>
+
+<script>
+	/**
+	 * page 页面
+	 * @description 页面组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/layout_component/n-page.html
+	 * @property {Boolean} show-scrollbar 控制是否出现滚动条
+	 * @property {String} background 页面背景色
+	 * @property {String} backgroundImage 页面背景图
+	 * @property {Boolean} loading 是否显示loading加载中...
+	 * @property {String} loading-gif 加载gif图片
+	 * @property {Number,String} loading-gif-size 加载gif图片大小
+	 * @property {Number,String} loading-text 加载显示内容
+	 * @property {Number,String} loading-text-size 加载显示内容大小
+	 * @event {Function()} scrolltoupper 滚动到顶部，会触发 scrolltoupper 事件
+	 * @event {Function()} scrolltolower 滚动到底部，会触发 scrolltolower 事件
+	 */
+	export default {
+		name: "nPage",
+		props: {
+			showScrollbar: {
+				type: Boolean, //控制是否出现滚动条
+				default: false
+			},
+			background: {
+				type: String, //背景颜色
+				default: 'transparent'
+			},
+			backgroundImage: {
+				type: String, //背景图
+				default: ''
+			},
+			loading: {
+				type: Boolean, //是否加载中
+				default: false
+			},
+			loadingGif: {
+				type: String, //加载中gif图
+				default: ''
+			},
+			loadingGifSize: {
+				type: [Number, String],
+				default: '180'
+			},
+			loadingText: {
+				type: [Number, String], //加载显示文本
+				default: '加载中...'
+			},
+			loadingTextSize: {
+				type: [Number, String],
+				default: '32'
+			}
+		},
+		data() {
+			return {
+				
+			}
+		},
+		computed: {
+			background_style() {
+				let style = {
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[
+						this.background]
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			image_style() {
+				let style = {
+					width: `${this.loadingGifSize}rpx`,
+					height: `${this.loadingGifSize}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			text_style() {
+				let style = {
+					fontSize: `${this.loadingTextSize}rpx`,
+					color: `#8c8c8c`
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		},
+		methods: {
+			//滚动到顶部，会触发 scrolltoupper 事件
+			onScrolltoupper() {
+				this.$emit("scrolltoupper");
+			},
+			//滚动到底部，会触发 scrolltolower 事件
+			onScrolltolower() {
+				this.$emit("scrolltolower");
+			},
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.page-absolute {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+
+	.pageBody {
+		flex: 1;
+		height: 0;
+	}
+
+	.page-screen {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		justify-content: center;
+		align-items: center;
+		/* #ifndef APP-NVUE */
+		z-index: 999;
+		/* #endif */
+	}
+
+	/* #ifndef APP-NVUE */
+	.showScrollbar ::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background-color: transparent;
+	}
+
+	/* #endif */
+</style>

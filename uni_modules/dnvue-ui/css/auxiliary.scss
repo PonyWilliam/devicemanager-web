@@ -1,0 +1,420 @@
+.view {
+	 /* #ifndef APP-NVUE */
+ 	position: relative;
+ 	display: flex;
+ 	flex-direction: column;
+	/* #endif */
+}
+.flex{
+	 /* #ifndef APP-NVUE */
+	 display: flex;
+	 /* #endif */
+}
+/* Flexbox 布局 */
+/* Flex Direction */
+.flex-row{flex-direction: row !important;@extend .view;}
+.flex-row-reverse{flex-direction: row-reverse !important;@extend .view;}
+.flex-column{flex-direction: column !important;@extend .view;}
+.flex-column-reverse{flex-direction: column-reverse !important;@extend .view;}
+/* Flex Wrap */
+.flex-nowrap{flex-wrap: nowrap !important;@extend .view;}
+.flex-wrap{flex-wrap: wrap !important;@extend .view;}
+.flex-wrap-reverse{flex-wrap: wrap-reverse !important;@extend .view;}
+/* Align Items */ 
+.items-stretch{align-items: stretch !important;@extend .view;}
+.items-start{align-items: flex-start !important;@extend .view;}
+.items-center{align-items: center !important;@extend .view;}
+.items-end{align-items: flex-end !important;@extend .view;}
+/* Justify Content */
+.justify-start{justify-content: flex-start !important;@extend .view;}
+.justify-center{justify-content: center !important;@extend .view;}
+.justify-end{justify-content: flex-end !important;@extend .view;}
+.justify-between{justify-content: space-between !important;@extend .view;}
+.justify-around{justify-content: space-around !important;@extend .view;}
+/* 字体粗细 */
+.text-normal{font-weight: normal;}
+.text-bold{font-weight: bold;}
+/* 文本对齐 */
+.text-left{text-align: left;}
+.text-center{text-align: center;}
+.text-right{text-align: right;}
+/* 文本装饰 */
+.text-underline{text-decoration: underline;}
+.text-through{text-decoration: line-through;}
+ /* flex */
+.flex-1{flex: 1 !important;}
+.flex-2{flex: 2 !important;}
+.flex-3{flex: 3 !important;}
+.flex-4{flex: 4 !important;}
+.flex-5{flex: 5 !important;}
+/* 文本大小 */
+.text-xs{font-size: 26rpx !important;}
+.text-sm{font-size: 28rpx !important;}
+.text-md{font-size: 30rpx !important;}
+.text-lg{font-size: 32rpx !important;}
+.text-xl{font-size: 34rpx !important;}
+/* 行高 */
+.leading-xs{line-height: 32rpx;}
+.leading-sm{line-height: 34rpx;}
+.leading-md{line-height: 36rpx;}
+.leading-lg{line-height: 38rpx;}
+.leading-xl{line-height: 40rpx;}
+
+@mixin lines($num) {
+  text-overflow: ellipsis;
+  /* #ifndef APP-NVUE */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $num;
+  /* #endif */
+  /* #ifdef APP-NVUE */
+  lines: $num;
+  /* #endif */
+}
+/* 超出行省略 */
+.lines-1{@include lines(1);}
+.lines-2{@include lines(2);}
+.lines-3{@include lines(3);}
+.lines-4{@include lines(4);}
+.lines-5{@include lines(5);}
+/* 定位 */
+.absolute{position: absolute !important;}
+.absolute-screen{position: absolute !important;left: 0;right: 0;top: 0;bottom: 0;z-index: 998;}
+.fixed{position: fixed !important;}
+.fixed-screen{position: fixed !important;left: 0;right: 0;top: 0;bottom: 0;z-index: 999;}
+.sticky{position: sticky !important;top: 0;z-index: 969;}
+/* 内外边距 */
+$margin-map:(
+	xs:8rpx,
+	sm:16rpx,
+	md:24rpx,
+	lg:32rpx,
+	xl:40rpx,
+);
+@each $parameter in xs,sm,md,lg,xl {
+	.margin-#{$parameter} {margin: map-get($map: $margin-map, $key: $parameter);}
+	.margin-top-#{$parameter} {margin-top: map-get($map: $margin-map, $key: $parameter);}
+	.margin-bottom-#{$parameter} {margin-bottom: map-get($map: $margin-map, $key: $parameter);}
+	.margin-left-#{$parameter} {margin-left: map-get($map: $margin-map, $key: $parameter);}
+	.margin-right-#{$parameter} {margin-right: map-get($map: $margin-map, $key: $parameter);}
+	.margin-x-#{$parameter} {margin-left: map-get($map: $margin-map, $key: $parameter);margin-right: map-get($map: $margin-map, $key: $parameter);}
+	.margin-y-#{$parameter} {margin-top: map-get($map: $margin-map, $key: $parameter);margin-bottom: map-get($map: $margin-map, $key: $parameter);}
+	.padding-#{$parameter} {padding: map-get($map: $margin-map, $key: $parameter);}
+	.padding-top-#{$parameter} {padding-top: map-get($map: $margin-map, $key: $parameter);}
+	.padding-bottom-#{$parameter} {padding-bottom: map-get($map: $margin-map, $key: $parameter);}
+	.padding-left-#{$parameter} {padding-left: map-get($map: $margin-map, $key: $parameter);}
+	.padding-right-#{$parameter} {padding-right: map-get($map: $margin-map, $key: $parameter);}
+	.padding-x-#{$parameter} {padding-left: map-get($map: $margin-map, $key: $parameter);padding-right: map-get($map: $margin-map, $key: $parameter);}
+	.padding-y-#{$parameter} {padding-top: map-get($map: $margin-map, $key: $parameter);padding-bottom: map-get($map: $margin-map, $key: $parameter);}
+}
+/* 圆角 */
+$radius-map:(
+	xs:4rpx,
+	sm:8rpx,
+	md:12rpx,
+	lg:16rpx,
+	xl:375rpx,
+);
+@each $parameter in xs,sm,md,lg,xl {
+	.radius-#{$parameter} {border-radius: map-get($map: $radius-map, $key: $parameter);}
+	.radius-tr-#{$parameter} {border-top-right-radius: map-get($map: $radius-map, $key: $parameter);}
+	.radius-tl-#{$parameter} {border-top-left-radius: map-get($map: $radius-map, $key: $parameter);}
+	.radius-bl-#{$parameter} {border-bottom-left-radius: map-get($map: $radius-map, $key: $parameter);}
+	.radius-br-#{$parameter} {border-bottom-right-radius: map-get($map: $radius-map, $key: $parameter);}
+}
+.border-solid{border-style: solid;}
+.border-dashed{border-style: dashed;}
+.border-dotted{border-style: dotted;}
+
+/* 边框宽度 */
+$border-map:(
+	xs:2rpx,
+	sm:4rpx,
+	md:6rpx,
+	lg:8rpx,
+	xl:10rpx,
+);
+@each $parameter in xs,sm,md,lg,xl {
+	.borde-#{$parameter} {border-width: map-get($map: $border-map, $key: $parameter);}
+	.borde-top-#{$parameter} {border-top-width: map-get($map: $border-map, $key: $parameter);}
+	.borde-bottom-#{$parameter} {border-bottom-width: map-get($map: $border-map, $key: $parameter);}
+	.borde-left-#{$parameter} {border-left-width: map-get($map: $border-map, $key: $parameter);}
+	.borde-right-#{$parameter} {border-right-width: map-get($map: $border-map, $key: $parameter);}
+}
+/* 透明度 */
+$opacity-map:(
+	0:0,
+	10:0.1,
+	20:0.2,
+	30:0.3,
+	40:0.4,
+	50:0.5,
+	60:0.6,
+	70:0.7,
+	80:0.8,
+	90:0.9,
+	100:1
+);
+@each $parameter in 0,10,20,30,40,50,60,70,80,90,100 {
+	.opacity-#{$parameter} {opacity: map-get($map: $opacity-map, $key: $parameter);}
+}
+
+
+//Theme / 主题色
+$theme-map:(
+	1:$theme-1,
+	2:$theme-2,
+	3:$theme-3,
+	4:$theme-4,
+	5:$theme-5,
+	6:$theme-6,
+	7:$theme-7,
+	8:$theme-8,
+	9:$theme-9,
+	10:$theme-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-theme-#{$parameter} {background-color: map-get($map: $theme-map, $key: $parameter) !important;}
+	.color-theme-#{$parameter} {color: map-get($map: $theme-map, $key: $parameter) !important;}
+	.border-theme-#{$parameter} {border-color: map-get($map: $theme-map, $key: $parameter) !important;}
+}
+//Dust Red / 薄暮斗志、奔放
+$red-map:(
+	1:$red-1,
+	2:$red-2,
+	3:$red-3,
+	4:$red-4,
+	5:$red-5,
+	6:$red-6,
+	7:$red-7,
+	8:$red-8,
+	9:$red-9,
+	10:$red-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-red-#{$parameter} {background-color: map-get($map: $red-map, $key: $parameter) !important;}
+	.color-red-#{$parameter} {color: map-get($map: $red-map, $key: $parameter) !important;}
+	.border-red-#{$parameter} {border-color: map-get($map: $red-map, $key: $parameter) !important;}
+}
+//Volcano / 火山醒目、澎湃
+$volcano-map:(
+	1:$volcano-1,
+	2:$volcano-2,
+	3:$volcano-3,
+	4:$volcano-4,
+	5:$volcano-5,
+	6:$volcano-6,
+	7:$volcano-7,
+	8:$volcano-8,
+	9:$volcano-9,
+	10:$volcano-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-volcano-#{$parameter} {background-color: map-get($map: $volcano-map, $key: $parameter) !important;}
+	.color-volcano-#{$parameter} {color: map-get($map: $volcano-map, $key: $parameter) !important;}
+	.border-volcano-#{$parameter} {border-color: map-get($map: $volcano-map, $key: $parameter) !important;}
+}
+//Sunset Orange / 日暮温暖、欢快
+$orange-map:(
+	1:$orange-1,
+	2:$orange-2,
+	3:$orange-3,
+	4:$orange-4,
+	5:$orange-5,
+	6:$orange-6,
+	7:$orange-7,
+	8:$orange-8,
+	9:$orange-9,
+	10:$orange-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-orange-#{$parameter} {background-color: map-get($map: $orange-map, $key: $parameter) !important;}
+	.color-orange-#{$parameter} {color: map-get($map: $orange-map, $key: $parameter) !important;}
+	.border-orange-#{$parameter} {border-color: map-get($map: $orange-map, $key: $parameter) !important;}
+}
+//Calendula Gold / 金盏花活力、积极
+$gold-map:(
+	1:$gold-1,
+	2:$gold-2,
+	3:$gold-3,
+	4:$gold-4,
+	5:$gold-5,
+	6:$gold-6,
+	7:$gold-7,
+	8:$gold-8,
+	9:$gold-9,
+	10:$gold-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-gold-#{$parameter} {background-color: map-get($map: $gold-map, $key: $parameter) !important;}
+	.color-gold-#{$parameter} {color: map-get($map: $gold-map, $key: $parameter) !important;}
+	.border-gold-#{$parameter} {border-color: map-get($map: $gold-map, $key: $parameter) !important;}
+}
+//Sunrise Yellow / 日出出生、阳光
+$yellow-map:(
+	1:$yellow-1,
+	2:$yellow-2,
+	3:$yellow-3,
+	4:$yellow-4,
+	5:$yellow-5,
+	6:$yellow-6,
+	7:$yellow-7,
+	8:$yellow-8,
+	9:$yellow-9,
+	10:$yellow-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-yellow-#{$parameter} {background-color: map-get($map: $yellow-map, $key: $parameter) !important;}
+	.color-yellow-#{$parameter} {color: map-get($map: $yellow-map, $key: $parameter) !important;}
+	.border-yellow-#{$parameter} {border-color: map-get($map: $yellow-map, $key: $parameter) !important;}
+}
+//Lime / 青柠自然、生机
+$lime-map:(
+	1:$lime-1,
+	2:$lime-2,
+	3:$lime-3,
+	4:$lime-4,
+	5:$lime-5,
+	6:$lime-6,
+	7:$lime-7,
+	8:$lime-8,
+	9:$lime-9,
+	10:$lime-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-lime-#{$parameter} {background-color: map-get($map: $lime-map, $key: $parameter) !important;}
+	.color-lime-#{$parameter} {color: map-get($map: $lime-map, $key: $parameter) !important;}
+	.border-lime-#{$parameter} {border-color: map-get($map: $lime-map, $key: $parameter) !important;}
+}
+
+//Polar Green / 极光绿健康、创新
+$green-map:(
+	1:$green-1,
+	2:$green-2,
+	3:$green-3,
+	4:$green-4,
+	5:$green-5,
+	6:$green-6,
+	7:$green-7,
+	8:$green-8,
+	9:$green-9,
+	10:$green-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-green-#{$parameter} {background-color: map-get($map: $green-map, $key: $parameter) !important;}
+	.color-green-#{$parameter} {color: map-get($map: $green-map, $key: $parameter) !important;}
+	.border-green-#{$parameter} {border-color: map-get($map: $green-map, $key: $parameter) !important;}
+}
+//Cyan / 明青希望、坚强
+$cyan-map:(
+	1:$cyan-1,
+	2:$cyan-2,
+	3:$cyan-3,
+	4:$cyan-4,
+	5:$cyan-5,
+	6:$cyan-6,
+	7:$cyan-7,
+	8:$cyan-8,
+	9:$cyan-9,
+	10:$cyan-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-cyan-#{$parameter} {background-color: map-get($map: $cyan-map, $key: $parameter) !important;}
+	.color-cyan-#{$parameter} {color: map-get($map: $cyan-map, $key: $parameter) !important;}
+	.border-cyan-#{$parameter} {border-color: map-get($map: $cyan-map, $key: $parameter) !important;}
+}
+//Daybreak Blue / 拂晓蓝包容、科技、普惠
+$blue-map:(
+	1:$blue-1,
+	2:$blue-2,
+	3:$blue-3,
+	4:$blue-4,
+	5:$blue-5,
+	6:$blue-6,
+	7:$blue-7,
+	8:$blue-8,
+	9:$blue-9,
+	10:$blue-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-blue-#{$parameter} {background-color: map-get($map: $blue-map, $key: $parameter) !important;}
+	.color-blue-#{$parameter} {color: map-get($map: $blue-map, $key: $parameter) !important;}
+	.border-blue-#{$parameter} {border-color: map-get($map: $blue-map, $key: $parameter) !important;}
+}
+//Geek Blue / 极客蓝探索、钻研
+$geekblue-map:(
+	1:$geekblue-1,
+	2:$geekblue-2,
+	3:$geekblue-3,
+	4:$geekblue-4,
+	5:$geekblue-5,
+	6:$geekblue-6,
+	7:$geekblue-7,
+	8:$geekblue-8,
+	9:$geekblue-9,
+	10:$geekblue-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-geekblue-#{$parameter} {background-color: map-get($map: $geekblue-map, $key: $parameter) !important;}
+	.color-geekblue-#{$parameter} {color: map-get($map: $geekblue-map, $key: $parameter) !important;}
+	.border-geekblue-#{$parameter} {border-color: map-get($map: $geekblue-map, $key: $parameter) !important;}
+}
+//Golden Purple / 酱紫优雅、浪漫
+$purple-map:(
+	1:$purple-1,
+	2:$purple-2,
+	3:$purple-3,
+	4:$purple-4,
+	5:$purple-5,
+	6:$purple-6,
+	7:$purple-7,
+	8:$purple-8,
+	9:$purple-9,
+	10:$purple-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-purple-#{$parameter} {background-color: map-get($map: $purple-map, $key: $parameter) !important;}
+	.color-purple-#{$parameter} {color: map-get($map: $purple-map, $key: $parameter) !important;}
+	.border-purple-#{$parameter} {border-color: map-get($map: $purple-map, $key: $parameter) !important;}
+}
+//Magenta / 法式洋红明快、感性
+$magenta-map:(
+	1:$magenta-1,
+	2:$magenta-2,
+	3:$magenta-3,
+	4:$magenta-4,
+	5:$magenta-5,
+	6:$magenta-6,
+	7:$magenta-7,
+	8:$magenta-8,
+	9:$magenta-9,
+	10:$magenta-10
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10 {
+	.bg-magenta-#{$parameter} {background-color: map-get($map: $magenta-map, $key: $parameter) !important;}
+	.color-magenta-#{$parameter} {color: map-get($map: $magenta-map, $key: $parameter) !important;}
+	.border-magenta-#{$parameter} {border-color: map-get($map: $magenta-map, $key: $parameter) !important;}
+}
+//Grat / 中性色板，中性色包含了黑、白、灰
+$gray-map:(
+	1:$gray-1,
+	2:$gray-2,
+	3:$gray-3,
+	4:$gray-4,
+	5:$gray-5,
+	6:$gray-6,
+	7:$gray-7,
+	8:$gray-8,
+	9:$gray-9,
+	10:$gray-10,
+	11:$gray-11,
+	12:$gray-12,
+	13:$gray-13
+);
+@each $parameter in 1,2,3,4,5,6,7,8,9,10,11,12,13 {
+	.bg-gray-#{$parameter} {background-color: map-get($map: $gray-map, $key: $parameter) !important;}
+	.color-gray-#{$parameter} {color: map-get($map: $gray-map, $key: $parameter) !important;}
+	.border-gray-#{$parameter} {border-color: map-get($map: $gray-map, $key: $parameter) !important;}
+}
+ 

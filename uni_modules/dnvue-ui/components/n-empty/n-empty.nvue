@@ -1,0 +1,71 @@
+<template>
+	<view class="n_empty">
+		<image class="_image" :src="emptyData[mode].src"></image>
+		<text class="_text" :style="color_style">{{text || emptyData[mode].describe}}</text>
+		<slot />
+	</view>
+</template>
+
+<script>
+	/**
+	 * empty 为空
+	 * @description 为空组件，默认为空组件图为 5:3比例
+	 * @tutorial https://dnvue.dengqichang.cn/component/feedback_component/n-empty.html
+	 * @property {String} mode 为空类型
+	 *  @value content 内容缺省页
+	 *  @value network 网络缺省页
+	 *  @value search 搜索缺省页
+	 *  @value collection 收藏缺省页
+	 *  @value evaluation 评价缺省页
+	 *  @value load 加载中缺省页
+	 *  @value shopping 购物车缺省页
+	 *  @value order 订单缺省页
+	 *  @value address 地址缺省页
+	 *  @value server 服务器缺省页
+	 * @property {String, Number} text 描述文本
+	 * @property {String, Number} size 文本字号
+	 * @property {String} color 文本颜色
+	 */
+	export default {
+		name: "nEmpty",
+		props: {
+			mode: {
+				type: String,
+				default: 'content'
+			},
+			text: {
+				type: [String, Number],
+				default: ''
+			},
+			size: {
+				type: [String, Number],
+				default: 32
+			},
+			color: {
+				type: String,
+				default: '$gray-6'
+			}
+		},
+		data() {
+			return {
+				emptyData: this.$store.empty,
+			}
+		},
+		computed: {
+			color_style() {
+				let style = {
+					color: this.$store.theme[this.color] == undefined ? this.color : this.$store.theme[this.color],
+					fontSize: `${this.size}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+		},
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+	.n_empty{align-items: center;}
+	._image {width: 500rpx;height: 300rpx;}
+	._text {text-align: center;margin-bottom: 24rpx;}
+</style>

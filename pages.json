@@ -1,0 +1,33 @@
+{
+	"easycom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"style":{
+				"navigationBarTitleText":"登 陆"
+			},
+			"path":"pages/index/index"
+		},
+		{
+			"style":{
+				"navigationBarTitleText":"个人中心",
+				"navigationBarBackgroundColor":"#4191ea",
+				"navigationBarTextStyle":"white"
+			},
+			"path":"pages/mine/mine"
+		},
+		{
+			"style":{
+				"navigationBarTitleText":"物品转借"
+			},
+			"path":"pages/borrow/borrow"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "RFIDeX",
+		"navigationBarBackgroundColor": "#939597",
+		"backgroundColor": "#F8F8F8"
+	}
+}

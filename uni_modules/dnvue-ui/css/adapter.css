@@ -1,0 +1,9 @@
+/* 用于适配vue/nvue页面 */
+/* #ifndef APP-NVUE */
+view {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+/* #endif */

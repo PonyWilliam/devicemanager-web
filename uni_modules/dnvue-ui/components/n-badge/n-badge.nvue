@@ -1,0 +1,112 @@
+<template>
+	<view class="n_badge">
+		<view class="badge_container" v-if="count != 0 || isDot" :style="isDot?container_dot_style:container_style">
+			<view v-if="isDot" :style="dot_style"></view>
+			<text v-else :style="text_style">{{Number(count)>Number(capsCount)?`${capsCount}+`:count}}</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	/**
+	 * badge 数字角标
+	 * @description 数字角标组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/basic_component/n-badge.html
+	 * @property {Number, String} count 展示的数字
+	 * @property {Number, String} caps-count 展示封顶的数字值
+	 * @property {Number, String} size 角标尺寸
+	 * @property {Boolean} is-dot 显示为红点
+	 * @property {Number, String} is-dot-size 红点尺寸
+	 * @property {String} color 文本颜色
+	 * @property {String} background 背景颜色
+	 */
+	export default {
+		name: "nBadge",
+		props: {
+			count: {
+				type: [String, Number], //展示的数字
+				default: 0
+			},
+			capsCount: {
+				type: [String, Number], //展示封顶的数字值
+				default: 99
+			},
+			size: {
+				type: [String, Number], //Badge的尺寸
+				default: 35
+			},
+			isDot: {
+				type: Boolean, //显示为红点
+				default: false
+			},
+			isDotSize: {
+				type: [String, Number], //红点尺寸
+				default: 15
+			},
+			background: {
+				type: String, //背景颜色
+				default: '$red-6'
+			},
+			color: {
+				type: String, //文本颜色
+				default: '$gray-1'
+			}
+		},
+		data() {
+			return {
+
+			}
+		},
+		computed: {
+			text_style() {
+				let style = {
+					color: this.$store.theme[this.color] == undefined ? this.color : this.$store.theme[this.color],
+					fontSize: `${Number(this.size)-9}rpx`,
+					paddingLeft: `9rpx`,
+					paddingRight: `9rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			container_style() {
+				let style = {
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[
+						this.background],
+					minWidth: `${this.size}rpx`,
+					height: `${this.size}rpx`,
+					borderRadius: `${this.size}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			container_dot_style() {
+				let style = {
+					width: `${this.size}rpx`,
+					height: `${this.size}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			dot_style() {
+				let style = {
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[
+						this.background],
+					height: `${this.isDotSize}rpx`,
+					width: `${this.isDotSize}rpx`,
+					borderRadius: `${this.size}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.n_badge {
+		flex-direction: row;
+	}
+
+	.badge_container {
+		align-items: center;
+		justify-content: center;
+	}
+</style>

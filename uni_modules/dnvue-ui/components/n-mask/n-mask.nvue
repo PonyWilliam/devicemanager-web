@@ -1,0 +1,81 @@
+<template>
+	<n-transition :mode-class="['fade']" :style-custom="maskClass" @change="onChange" :show="isShow" @click="onMask">
+		<slot></slot>
+	</n-transition>
+</template>
+
+<script>
+	/**
+	 * mask 遮罩层
+	 * @description 遮罩层组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/feedback_component/n-mask.html
+	 * @property {Boolean} show 控制显示或者隐藏
+	 * @property {Boolean} mask-close 点击遮罩层是否可关闭
+	 * @event {Function()} change 当打开或者关闭时返回遮罩层状态
+	 */
+	export default {
+		name: 'nPopup',
+		props: {
+			show: {
+				type: Boolean, //控制显示或者隐藏
+				default: false
+			},
+			maskClose: {
+				type: Boolean, //点击遮罩层是否可关闭
+				default: false
+			}
+		},
+		data() {
+			return {
+				isShow: false,
+				//遮罩层
+				maskClass: {
+					'position': 'fixed',
+					'bottom': 0,
+					'top': 0,
+					'left': 0,
+					'right': 0,
+					'backgroundColor': 'rgba(0, 0, 0, 0.4)'
+				}
+			};
+		},
+		watch: {
+			show: {
+				handler(newVal) {
+					if (newVal) {
+						this.open()
+					} else {
+						this.close()
+					}
+				},
+				immediate: true
+			}
+		},
+		methods: {
+			//打开弹出层
+			open() {
+				this.isShow = true
+			},
+			//关闭弹出层
+			close(e) {
+				this.isShow = false
+			},
+			//点击关闭弹出层
+			onMask(e) {
+				if (this.maskClose) {
+					this.isShow = false
+				}
+			},
+			//当打开或者关闭返回信息
+			onChange(e) {
+				this.$emit("change", {
+					detail: e.detail
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>

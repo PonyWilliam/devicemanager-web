@@ -1,0 +1,54 @@
+<template>
+	<view class="n_statusBar" :style="status_style"></view>
+</template>
+
+<script>
+	/**
+	 * status-bar 状态栏
+	 * @description 状态栏组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/basic_component/n-status-bar.html
+	 * @property {String} background 背景颜色
+	 * @property {Object} style-custom 组件自定义样式，同 css 样式。注意带’-‘连接符的属性需要使用小驼峰写法如：`backgroundColor:red`
+	 */
+	export default {
+		name: 'nStatusBar',
+		props: {
+			background: {
+				type: String, //背景颜色
+				default: 'transparent'
+			},
+			styleCustom: {
+				type: Object, //组件自定义样式，同 css 样式。注意带’-‘连接符的属性需要使用小驼峰写法如：`backgroundColor:red`
+				default: function() {
+					return {}
+				}
+			}
+		},
+		data() {
+			return {
+
+			}
+		},
+		computed: {
+			status_style() {
+				let style = {
+					...this.styleCustom,
+					height: uni.getSystemInfoSync().statusBarHeight + 'px',
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[this.background]
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.n_statusBar {
+		width: 750rpx;
+	}
+</style>

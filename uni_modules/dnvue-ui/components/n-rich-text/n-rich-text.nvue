@@ -1,0 +1,85 @@
+<template>
+	<rich-text :nodes="parserNodes" :style="rich_style"></rich-text>
+</template>
+
+<script>
+	import htmlParser from "../../plug-in/htmlParser.js"
+	/**
+	 * rich-text 富文本
+	 * @description 富文本组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/other_component/n-rich-text.html
+	 * @property {String} nodes 富文本内容
+	 * @property {Number, String} width 宽度
+	 * @property {Number, String} minWidth 最小宽度
+	 * @property {Number, String} maxWidth 最大宽度
+	 * @property {Object} style-custom 组件自定义样式，同 css 样式。注意带’-‘连接符的属性需要使用小驼峰写法如：`backgroundColor:red`
+	 */
+	export default {
+		name: "nRichText",
+		data() {
+			return {
+
+			}
+		},
+		props: {
+			nodes: {
+				type: String,
+				default: ""
+			},
+			width: {
+				type: [Number, String], //宽度
+				default: ""
+			},
+			minWidth: {
+				type: [Number, String], //最小宽度
+				default: ""
+			},
+			maxWidth: {
+				type: [Number, String], //最大宽度
+				default: ""
+			},
+			styleCustom: {
+				type: Object, //组件自定义样式，同 css 样式。注意带’-‘连接符的属性需要使用小驼峰写法如：`backgroundColor:red`
+				default: function() {
+					return {}
+				}
+			}
+		},
+		computed: {
+			parserNodes() {
+				return htmlParser(this.nodes)
+			},
+			rich_style() {
+				let style = { ...this.styleCustom
+				};
+				/* 宽度 */
+				if (this.width !== '') {
+					let width_temp = {
+						width: `${this.width}rpx`
+					};
+					style = Object.assign(style, width_temp);
+				};
+				/* 最小宽度 */
+				if (this.minWidth !== '') {
+					let minWidth_temp = {
+						minWidth: `${this.width}rpx`
+					};
+					style = Object.assign(style, minWidth_temp);
+				};
+				/* 最大宽度 */
+				if (this.maxWidth !== '') {
+					let maxWidth_temp = {
+						maxWidth: `${this.width}rpx`
+					};
+					style = Object.assign(style, maxWidth_temp);
+				};
+
+				return this.$store.tools.styleInto(style);
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>

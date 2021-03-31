@@ -1,0 +1,112 @@
+<template>
+	<view @click="click" @touchcancel="touchcancel" @touchstart="touchstart" @touchend="touchend" :style="container_style"
+	 :class="['n_button',status || disabled?'opacity_before':'opacity_after']">
+		<text :style="text_style">{{text}}</text>
+	</view>
+</template>
+
+<script>
+	/**
+	 * button 按钮
+	 * @description 按钮组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/basic_component/n-button.html
+	 * @property {Number, String} text 按钮名称
+	 * @property {Number, String} size 名称大小
+	 * @property {String} color 名称颜色
+	 * @property {Number, String} width 宽度
+	 * @property {Number, String} height 高度
+	 * @property {String} background 背景颜色
+	 * @property {Number, String} radius 圆角
+	 * @property {Boolean} disabled 是否禁用
+	 * @event {Function()} click 点击事件
+	 */
+	export default {
+		name: "nButton",
+		props: {
+			text: {
+				type: [Number, String], //文本
+				default: 'DNVUE'
+			},
+			size: {
+				type: [Number, String], //文本大小
+				default: 30
+			},
+			color: {
+				type: String, //文本颜色
+				default: '$gray-1'
+			},
+			width: {
+				type: [Number, String], //宽度
+				default: 520
+			},
+			height: {
+				type: [Number, String], //高度
+				default: 80
+			},
+			background: {
+				type: String, //背景颜色
+				default: '$theme-6'
+			},
+			radius: {
+				type: [Number, String], //圆角
+				default: 8
+			},
+			disabled: {
+				type: Boolean, //禁用
+				default: false
+			}
+		},
+		data() {
+			return {
+				status: false
+			}
+		},
+		computed: {
+			text_style() {
+				let style = {
+					color: this.$store.theme[this.color] == undefined ? this.color : this.$store.theme[this.color],
+					fontSize: `${this.size}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			container_style() {
+				let style = {
+					background: this.$store.theme[this.background] == undefined ? this.background : this.$store.theme[this.background],
+					width: `${this.width}rpx`,
+					height: `${this.height}rpx`,
+					borderRadius: `${this.radius}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		},
+		methods: {
+			//触摸开始，多点触控，后面的手指同样会触发
+			touchstart() {
+				if (!this.disabled) {
+					this.status = true;
+				}
+			},
+			//触摸结束，手指离开屏幕时
+			touchend() {
+				this.status = false;
+			},
+			//触摸被取消，当系统停止跟踪触摸的时候触发
+			touchcancel() {
+				this.status = false; //触摸被打断时回填按钮状态
+			},
+			//点击事件
+			click(e) {
+				if (!this.disabled) {
+					this.$emit("click", e)
+				}
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+	.n_button{flex-direction: row;justify-content: center;align-items: center;}
+	.opacity_before{opacity: 0.7;}
+	.opacity_after{opacity: 1;}
+</style>

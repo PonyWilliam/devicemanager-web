@@ -1,0 +1,51 @@
+<template>
+	<view class="n_loading">
+		<image v-if="status == 1" class="_image" :src="loadingGif || nLoading.loadingGif"></image>
+		<text class="_text">{{list[status] || nLoading.list[status]}}</text>
+	</view>
+</template>
+
+<script>
+	/**
+	 * loading 上拉加载
+	 * @description 上拉加载组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/layout_component/n-loading.html
+	 * @property {Number, String} status 上拉加载状态
+	 * @property {Array} list 上拉加载数据定义
+	 * @property {String} loading-gif 加载中GIF图
+	 */
+	export default {
+		name: 'nLoading',
+		props: {
+			status: {
+				type: [Number, String],
+				default: 0
+			},
+			list: {
+				type: Array,
+				default: function() {
+					return []
+				}
+			},
+			loadingGif: {
+				type: String,
+				default: ''
+			}
+		},
+		data() {
+			return {
+				nLoading: this.$store.global.nLoading
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+	.n_loading {height: 66rpx;flex-direction: row;align-items: center;justify-content: center;}
+	._text {font-size: 30rpx;color: #8c8c8c;}
+	._image {height: 40rpx;width: 40rpx;margin-right: 6rpx;}
+</style>

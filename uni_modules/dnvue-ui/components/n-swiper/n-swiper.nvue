@@ -1,0 +1,264 @@
+<template>
+	<view :class="[indicatorLocation]">
+		<swiper :style="{height:`${height}rpx`}" class="swiper" :current="currentIndex" :autoplay="autoplay"
+			:interval="interval" :circular="circular" :vertical="vertical" @change="onSwiperChange">
+			<swiper-item v-for="(item,index) in list" :key="index">
+				<view class="swiperItem" @click="onClick(index)">
+					<image :style="image_style" :src="item.image"></image>
+					<!-- 文本类型 -->
+					<view v-if="mode=='text'" class="text" :style="{width:`${width}rpx`}">
+						<n-text size="28" leading="64" color="#ffffff" align="center" lines="1" :text="item.title" />
+					</view>
+				</view>
+			</swiper-item>
+		</swiper>
+		<view class="indicates">
+			<!-- 数字类型 -->
+			<view v-if="mode == 'number'" class="number" :style="mode_style">
+				<image class="number_image" :src="swiperNumber"></image>
+				<view class="number_text_container">
+					<text class="text_number">{{currentIndex+1}}</text>
+					<text class="text_number text_margin">/</text>
+					<text class="text_number">{{list.length}}</text>
+				</view>
+			</view>
+			<!-- 圆点类型 -->
+			<view v-if="mode == 'dot'" :style="mode_style">
+				<view :style="{background: currentIndex==index?indicatorActiveColorValue:indicatorColorValue}"
+					class="dot" v-for="(item,index) in list" :key="index"></view>
+			</view>
+			<!-- 长块类型 -->
+			<view v-if="mode == 'strip'" :style="mode_style">
+				<view :style="{width:currentIndex == index?'25rpx':'14rpx'}" class="strip" v-for="(item,index) in list"
+					:key="index">
+					<view class="stripBox"
+						:style="{background: currentIndex == index?indicatorActiveColorValue:indicatorColorValue}">
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	/**
+	 * swiper 轮播图
+	 * @description 轮播图组件
+	 * @tutorial https://dnvue.dengqichang.cn/component/layout_component/n-swiper.html
+	 * @property {Object, Array} list 轮播图 list 数据 数据结构:[{image: '图片地址',title: '标题'}]
+	 * @property {String} mode 指示点类型
+	 *  @value number 数字
+	 *  @value dot 圆点
+	 *  @value strip 长块
+	 *  @value text 文本
+	 *  @value none 无指示点
+	 * @property {Number, String} radius 轮播图圆角
+	 * @property {String} indicator-location 指示点位置
+	 *  @value left 左侧
+	 *  @value center 居中
+	 *  @value right 右侧 
+	 * @property {String} indicator-color 指示点颜色
+	 * @property {String} indicator-active-color 指示点激活颜色
+	 * @property {Number, String} height 轮播图高度
+	 * @property {Number, String} width 轮播图宽度 
+	 * @property {Number, String} current 当前所在滑块的 index
+	 * @property {Boolean} autoplay 是否自动切换
+	 * @property {Number, String} interval 自动切换时间间隔
+	 * @property {Boolean} circular 是否采用衔接滑动，即播放到末尾后重新回到开头
+	 * @property {Boolean} vertical 滑动方向是否为纵向
+	 */
+	export default {
+		name:"nSwiper",
+		props: {
+			list: {
+				type: [Object, Array],
+				default: function() {
+					return []
+				}
+			},
+			mode: {
+				type: String, //类型 number、dot、strip、text
+				default: 'strip'
+			},
+			radius: {
+				type: [Number, String], //轮播图圆角
+				default: 0
+			},
+			indicatorLocation: {
+				type: String, //left、center、right
+				default: 'center'
+			},
+			indicatorColor: {
+				type: String,
+				default: 'rgba(0, 0, 0, 0.3)'
+			},
+			indicatorActiveColor: {
+				type: String,
+				default: '#ffffff'
+			},
+			height: {
+				type: [Number, String], //高度
+				default: 300
+			},
+			width: {
+				type: [Number, String], //宽度
+				default: 750
+			},
+			current: {
+				type: [Number, String], //当前所在滑块的 index
+				default: 0
+			},
+			autoplay: {
+				type: Boolean, //是否自动切换
+				default: true
+			},
+			interval: {
+				type: [Number, String], //自动切换时间间隔
+				default: 5000
+			},
+			circular: {
+				type: Boolean, //是否采用衔接滑动，即播放到末尾后重新回到开头
+				default: true
+			},
+			vertical: {
+				type: Boolean, //滑动方向是否为纵向
+				default: false
+			}
+		},
+		data() {
+			return {
+				swiperNumber: this.$store.global.other.swiperNumber,
+				currentIndex: 0,
+				indicatorColorValue: this.$store.theme[this.indicatorColor] == undefined ? this.indicatorColor : this
+					.$store.theme[this.indicatorColor],
+				indicatorActiveColorValue: this.$store.theme[this.indicatorActiveColor] == undefined ? this
+					.indicatorActiveColor : this.$store.theme[this.indicatorActiveColor]
+			}
+		},
+		watch: {
+			current: {
+				handler() {
+					this.currentIndex = this.current;
+				},
+				immediate: true
+			}
+		},
+		computed: {
+			image_style() {
+				let style = {
+					width: `${this.width}rpx`,
+					height: `${this.height}rpx`,
+					borderRadius: `${this.radius}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			},
+			mode_style() {
+				let style = {
+					flexDirection: 'row',
+					margin: `0rpx ${(750-Number(this.width))/2+32}rpx`
+				};
+				return this.$store.tools.styleInto(style);
+			}
+		},
+		methods: {
+			//轮播图切换时触发	
+			onSwiperChange(e) {
+				this.currentIndex = e.detail.current;
+				this.$emit("change", {
+					index: e.detail.current
+				})
+			},
+			//点击轮播图时触发
+			onClick(index) {
+				this.$emit("click", {
+					index: index
+				})
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	@import "../../css/adapter.css";
+
+	.center {
+		align-items: center;
+		width: 750rpx;
+	}
+
+	.left {
+		align-items: flex-start;
+		width: 750rpx;
+	}
+
+	.right {
+		align-items: flex-end;
+		width: 750rpx;
+	}
+
+	.text {
+		background-color: rgba(0, 0, 0, 0.3);
+		position: absolute;
+	}
+
+	.stripBox {
+		flex: 1;
+		border-radius: 10rpx;
+	}
+
+	.strip {
+		height: 8rpx;
+		border-radius: 30rpx;
+		margin: 0rpx 7rpx;
+		transition: width 0.3s;
+	}
+
+	.dot {
+		width: 13rpx;
+		height: 13rpx;
+		border-radius: 30rpx;
+		margin: 0rpx 7rpx;
+	}
+
+	.text_margin {
+		margin: 0rpx 8rpx;
+	}
+
+	.text_number {
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+
+	.number_text_container {
+		flex-direction: row;
+		width: 80rpx;
+		height: 40rpx;
+		justify-content: center;
+		position: absolute;
+		align-items: center;
+	}
+
+	.number_image {
+		width: 80rpx;
+		height: 40rpx;
+	}
+
+	.number {
+		width: 80rpx;
+		height: 40rpx;
+	}
+
+	.indicates {
+		bottom: 24rpx;
+		position: absolute;
+	}
+
+	.swiper {
+		width: 750rpx;
+	}
+
+	.swiperItem {
+		justify-content: flex-end;
+		align-items: center;
+	}
+</style>
