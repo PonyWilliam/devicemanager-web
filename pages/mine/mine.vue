@@ -14,7 +14,6 @@
 				<text class="title">帮助中心</text>
 				<ol class="helps">
 					<li>大家可以通过转借确认来确认其它人的转借</li>
-					<li>如果需要反馈意见请点击意见反馈</li>
 					<li>我的通知用于系统推送一些通知</li>
 					<li>转借确认后该物品若丢失将由你负全部责任</li>
 				</ol>
@@ -40,9 +39,9 @@
 							<view class="icon"><img src="../../static/user/favorite.png"></view>
 							<view class="text">转借确认</view>
 						</view>
-						<view class="item">
+						<view class="item" @click="logout">
 							<view class="icon"><img src="../../static/user/service.png"></view>
-							<view class="text">意见反馈</view>
+							<view class="text">退出登陆</view>
 						</view>
 					</view>
 				</view>
@@ -174,6 +173,21 @@
 			},
 			myorder:function(){
 				//查看自己的租借记录
+			},
+			logout:function(){
+				//退出登陆
+				uni.showModal({
+					title:'退出登陆',
+					content:'是否确认退出登陆',
+					success:res=>{
+						if(res.confirm){
+							uni.clearStorageSync()
+							uni.redirectTo({
+								url:'../index/index'
+							})
+						}
+					}
+				})
 			}
 		}
 	}
