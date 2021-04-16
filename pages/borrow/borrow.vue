@@ -22,6 +22,7 @@ import {config} from '@/util/config.js'
 export default {
 	data() {
 		return {
+			res:[],
 			show:false,
 			token:'',
 			list:[
@@ -118,6 +119,13 @@ export default {
 		},
 		openlist(){
 			this.show = true
+		},
+		copyArray(data){
+			let res = []
+			for(let x of data){
+				res.push(x)
+			}
+			return res
 		}
 	},
 	// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -179,7 +187,7 @@ export default {
 										})
 									}
 								})
-							}).then(data=>{
+							}).then((data)=>{
 								if(data && data.code && data.code != 200){
 									uni.showModal({
 										title:"error",
@@ -199,8 +207,9 @@ export default {
 										"method":"GET",
 									}).then(res2=>res2.json()).catch(err=>console.log(err)).then(res2=>{
 										res2 = res2.data
+										console.log(res2)
 										for(let x of data){
-											for (let y of res2.infos){
+											for (let y of res2){
 												if(x.PID == y.id){
 													let temp = {
 														"label":`${y.product_name}(pid:${y.id})`,

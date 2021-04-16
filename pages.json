@@ -22,6 +22,12 @@
 				"navigationBarTitleText":"物品转借"
 			},
 			"path":"pages/borrow/borrow"
+		},
+		{
+			"style":{
+				"navigationBarTitleText":"转借确认"
+			},
+			"path":"pages/borrow/order"
 		}
 	],
 	"globalStyle": {

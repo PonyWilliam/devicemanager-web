@@ -31,11 +31,11 @@
 						<view class="phone-number">姓名:{{res.name}}</view>
 					</view>
 					<view class="box-bd">
-						<view class="item">
+						<view class="item" @click="notification">
 							<view class="icon"><img src="../../static/user/message.png"></view>
 							<view class="text">我的通知</view>
 						</view>
-						<view class="item">
+						<view class="item" @click="confirm">
 							<view class="icon"><img src="../../static/user/favorite.png"></view>
 							<view class="text">转借确认</view>
 						</view>
@@ -154,6 +154,17 @@
 			})
 		},
 		methods: {
+			confirm:function(){
+				uni.navigateTo({
+					url:'../borrow/order'
+				})
+			},
+			notification:function(){
+				uni.showModal({
+					title:'预留功能',
+					content:'预留功能'
+				})
+			},
 			borrow:function(){
 				uni.navigateTo({
 					url:'../borrow/borrow'
